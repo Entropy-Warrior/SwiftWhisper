@@ -20,29 +20,27 @@ let package = Package(
             path: "whisper.cpp",
             exclude: ["bindings", "examples", "models", "samples", "tests"],
             sources: [
+                "src/whisper.cpp",
                 "ggml/src/ggml.c",
                 "ggml/src/ggml-alloc.c",
                 "ggml/src/ggml-backend.cpp",
                 "ggml/src/ggml-quants.c",
-                "ggml/src/ggml-threading.cpp",
-                "src/whisper.cpp"
+                "ggml/src/ggml-threading.cpp"
             ],
             publicHeadersPath: "include",
             cSettings: [
-                .headerSearchPath("."),
-                .headerSearchPath("include"),
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
+                .headerSearchPath("include"),
                 .headerSearchPath("src"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
             ],
             cxxSettings: [
-                .headerSearchPath("."),
-                .headerSearchPath("include"),
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
+                .headerSearchPath("include"),
                 .headerSearchPath("src"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
