@@ -24,41 +24,23 @@ let package = Package(
                 "ggml/src/ggml-opencl",
                 "ggml/src/ggml-kompute",
                 "ggml/src/ggml-sycl",
-                "ggml/src/ggml-blas"
+                "ggml/src/ggml-blas",
+                "ggml/src/ggml-metal/ggml-metal.metal"
             ],
             sources: [
-                "ggml.c",
-                "whisper.cpp",
-                "ggml/src/ggml-alloc.c",
-                "ggml/src/ggml-backend.cpp",
-                "ggml/src/ggml-backend-reg.cpp",
-                "ggml/src/ggml-quants.c",
-                "ggml/src/ggml-threading.cpp",
-                "ggml/src/ggml-opt.cpp",
-                "ggml/src/ggml-metal/ggml-metal.m",
-                "ggml/src/ggml-metal/ggml-metal.metal",
-                "ggml/src/ggml-cpu/ggml-cpu.c",
-                "ggml/src/ggml-cpu/ggml-cpu.cpp",
-                "ggml/src/ggml-cpu/ggml-cpu-quants.c",
-                "ggml/src/ggml-cpu/ggml-cpu-traits.cpp",
-                "ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp",
-                "ggml/src/ggml-cpu/ggml-cpu-hbm.cpp",
-                "ggml/src/ggml-cpu/amx/amx.cpp",
-                "ggml/src/ggml-cpu/amx/mmq.cpp",
-                "ggml/src/ggml-cpu/llamafile/sgemm.cpp"
+                ".",
+                "ggml/src"
             ],
             resources: [
                 .copy("ggml/src/ggml-metal/ggml-metal.metal")
             ],
             publicHeadersPath: "include",
             cSettings: [
+                .headerSearchPath("."),
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
                 .headerSearchPath("ggml/src/ggml-cpu"),
-                .headerSearchPath("ggml/src/ggml-cpu/amx"),
-                .headerSearchPath("ggml/src/ggml-cpu/llamafile"),
                 .headerSearchPath("ggml/src/ggml-metal"),
-                .headerSearchPath("include"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
                 .define("GGML_USE_METAL"),
@@ -78,13 +60,11 @@ let package = Package(
                 ])
             ],
             cxxSettings: [
+                .headerSearchPath("."),
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
                 .headerSearchPath("ggml/src/ggml-cpu"),
-                .headerSearchPath("ggml/src/ggml-cpu/amx"),
-                .headerSearchPath("ggml/src/ggml-cpu/llamafile"),
                 .headerSearchPath("ggml/src/ggml-metal"),
-                .headerSearchPath("include"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
                 .define("GGML_USE_METAL"),
