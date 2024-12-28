@@ -27,21 +27,23 @@ let package = Package(
                 "ggml/src/ggml-threading.cpp",
                 "src/whisper.cpp"
             ],
-            publicHeadersPath: "include",
+            publicHeadersPath: "whisper.cpp/include",
             cSettings: [
-                .headerSearchPath("ggml/include"),
-                .headerSearchPath("ggml/src"),
-                .headerSearchPath("include"),
-                .headerSearchPath("src"),
+                .headerSearchPath("."),
+                .headerSearchPath("whisper.cpp/include"),
+                .headerSearchPath("whisper.cpp/ggml/include"),
+                .headerSearchPath("whisper.cpp/ggml/src"),
+                .headerSearchPath("whisper.cpp/src"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
             ],
             cxxSettings: [
-                .headerSearchPath("ggml/include"),
-                .headerSearchPath("ggml/src"),
-                .headerSearchPath("include"),
-                .headerSearchPath("src"),
+                .headerSearchPath("."),
+                .headerSearchPath("whisper.cpp/include"),
+                .headerSearchPath("whisper.cpp/ggml/include"),
+                .headerSearchPath("whisper.cpp/ggml/src"),
+                .headerSearchPath("whisper.cpp/src"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
@@ -54,7 +56,8 @@ let package = Package(
         ),
         .target(
             name: "SwiftWhisper",
-            dependencies: ["whisper_cpp"]
+            dependencies: ["whisper_cpp"],
+            path: "Sources/SwiftWhisper"
         ),
         .testTarget(
             name: "WhisperTests",
