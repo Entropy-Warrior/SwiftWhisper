@@ -25,11 +25,32 @@ let package = Package(
                 "ggml/src/ggml-kompute",
                 "ggml/src/ggml-sycl",
                 "ggml/src/ggml-blas",
+                "ggml/src/ggml-cann",
+                "ggml/src/ggml-hip",
+                "ggml/src/ggml-musa",
+                "ggml/src/ggml-rpc",
+                "ggml/CMakeLists.txt",
+                "ggml/src/CMakeLists.txt",
+                "ggml/src/ggml-metal/CMakeLists.txt",
+                "ggml/src/ggml-cpu/CMakeLists.txt",
+                "ggml/src/ggml-cpu/cmake",
                 "ggml/src/ggml-metal/ggml-metal.metal"
             ],
             sources: [
-                ".",
-                "ggml/src"
+                "ggml.c",
+                "whisper.cpp",
+                "ggml/src/ggml-alloc.c",
+                "ggml/src/ggml-backend.cpp",
+                "ggml/src/ggml-backend-reg.cpp",
+                "ggml/src/ggml-quants.c",
+                "ggml/src/ggml-threading.cpp",
+                "ggml/src/ggml-opt.cpp",
+                "ggml/src/ggml-metal/ggml-metal.m",
+                "ggml/src/ggml-cpu/ggml-cpu.c",
+                "ggml/src/ggml-cpu/ggml-cpu.cpp",
+                "ggml/src/ggml-cpu/ggml-cpu-quants.c",
+                "ggml/src/ggml-cpu/ggml-cpu-traits.cpp",
+                "ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp"
             ],
             resources: [
                 .copy("ggml/src/ggml-metal/ggml-metal.metal")
