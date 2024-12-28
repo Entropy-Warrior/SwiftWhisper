@@ -100,7 +100,8 @@ let package = Package(
                     "-Wno-unused-variable",
                     "-Wno-unused-function",
                     "-O3",
-                    "-march=native"
+                    "-march=native",
+                    "-std=c++17"
                 ])
             ],
             linkerSettings: [
@@ -109,7 +110,7 @@ let package = Package(
                 .linkedFramework("Metal"),
                 .linkedFramework("MetalKit"),
                 .linkedFramework("MetalPerformanceShaders"),
-                .unsafeFlags(["-fno-objc-arc"])
+                .unsafeFlags(["-fno-objc-arc", "-stdlib=libc++"])
             ]
         ),
         .target(
@@ -122,6 +123,6 @@ let package = Package(
             dependencies: ["SwiftWhisper"]
         ),
     ],
-    cxxLanguageStandard: .cxx11
+    cxxLanguageStandard: .cxx17
 )
 
