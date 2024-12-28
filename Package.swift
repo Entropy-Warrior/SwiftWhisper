@@ -38,19 +38,25 @@ let package = Package(
             cSettings: [
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
+                .headerSearchPath("ggml/src/ggml-cpu"),
+                .headerSearchPath("ggml/src/ggml-cpu/amx"),
                 .headerSearchPath("include"),
                 .headerSearchPath("src"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
+                .define("GGML_USE_METAL"),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
             ],
             cxxSettings: [
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
+                .headerSearchPath("ggml/src/ggml-cpu"),
+                .headerSearchPath("ggml/src/ggml-cpu/amx"),
                 .headerSearchPath("include"),
                 .headerSearchPath("src"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
+                .define("GGML_USE_METAL"),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
             ],
             linkerSettings: [
