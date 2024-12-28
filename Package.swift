@@ -24,8 +24,10 @@ let package = Package(
                 "ggml/src/ggml.c",
                 "ggml/src/ggml-alloc.c",
                 "ggml/src/ggml-backend.cpp",
+                "ggml/src/ggml-backend-reg.cpp",
                 "ggml/src/ggml-quants.c",
-                "ggml/src/ggml-threading.cpp"
+                "ggml/src/ggml-threading.cpp",
+                "ggml/src/ggml-opt.cpp"
             ],
             publicHeadersPath: "include",
             cSettings: [
