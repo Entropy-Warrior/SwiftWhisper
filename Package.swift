@@ -16,7 +16,15 @@ let package = Package(
     ],
     targets: [
         .target(
+            name: "whisper_metal",
+            path: "Sources/whisper_cpp/ggml/src/ggml-metal",
+            resources: [
+                .process("ggml-metal.metal")
+            ]
+        ),
+        .target(
             name: "whisper_cpp",
+            dependencies: ["whisper_metal"],
             path: "Sources/whisper_cpp",
             exclude: [
                 "ggml/src/ggml-cuda",
@@ -52,9 +60,6 @@ let package = Package(
                 "ggml/src/ggml-metal/ggml-metal.m",
                 "ggml/src/ggml-cpu/ggml-cpu.c",
                 "ggml/src/ggml-cpu/ggml-cpu-quants.c"
-            ],
-            resources: [
-                .copy("ggml/src/ggml-metal/ggml-metal.metal")
             ],
             publicHeadersPath: "include",
             cSettings: [
