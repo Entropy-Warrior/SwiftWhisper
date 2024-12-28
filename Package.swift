@@ -27,23 +27,23 @@ let package = Package(
                 "ggml/src/ggml-threading.cpp",
                 "src/whisper.cpp"
             ],
-            publicHeadersPath: "whisper.cpp/include",
+            publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("."),
-                .headerSearchPath("whisper.cpp/include"),
-                .headerSearchPath("whisper.cpp/ggml/include"),
-                .headerSearchPath("whisper.cpp/ggml/src"),
-                .headerSearchPath("whisper.cpp/src"),
+                .headerSearchPath("include"),
+                .headerSearchPath("ggml/include"),
+                .headerSearchPath("ggml/src"),
+                .headerSearchPath("src"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
             ],
             cxxSettings: [
                 .headerSearchPath("."),
-                .headerSearchPath("whisper.cpp/include"),
-                .headerSearchPath("whisper.cpp/ggml/include"),
-                .headerSearchPath("whisper.cpp/ggml/src"),
-                .headerSearchPath("whisper.cpp/src"),
+                .headerSearchPath("include"),
+                .headerSearchPath("ggml/include"),
+                .headerSearchPath("ggml/src"),
+                .headerSearchPath("src"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
