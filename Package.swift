@@ -18,6 +18,7 @@ let package = Package(
         .target(
             name: "whisper_cpp",
             path: "whisper.cpp",
+            exclude: ["bindings", "examples", "models", "samples", "tests"],
             sources: [
                 "src/whisper.cpp",
                 "ggml/src/ggml.c",
@@ -28,18 +29,29 @@ let package = Package(
             ],
             publicHeadersPath: "include",
             cSettings: [
+                .headerSearchPath("."),
                 .headerSearchPath("src"),
+                .headerSearchPath("include"),
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
-                .headerSearchPath("include"),
+                .define("GGML_USE_ACCELERATE", .when(platforms: [.macOS, .iOS])),
+                .define("WHISPER_USE_COREML", .when(platforms: [.macOS, .iOS])),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
             ],
             cxxSettings: [
+                .headerSearchPath("."),
                 .headerSearchPath("src"),
+                .headerSearchPath("include"),
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
-                .headerSearchPath("include"),
+                .define("GGML_USE_ACCELERATE", .when(platforms: [.macOS, .iOS])),
+                .define("WHISPER_USE_COREML", .when(platforms: [.macOS, .iOS])),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
+            ],
+            linkerSettings: [
+                .linkedFramework("Accelerate"),
+                .linkedFramework("CoreML", .when(platforms: [.macOS, .iOS])),
+                .linkedFramework("Metal", .when(platforms: [.macOS, .iOS]))
             ]
         ),
         .target(
