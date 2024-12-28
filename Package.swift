@@ -20,38 +20,36 @@ let package = Package(
             path: "whisper.cpp",
             exclude: ["bindings", "examples", "models", "samples", "tests"],
             sources: [
-                "src/whisper.cpp",
                 "ggml/src/ggml.c",
                 "ggml/src/ggml-alloc.c",
                 "ggml/src/ggml-backend.cpp",
                 "ggml/src/ggml-quants.c",
-                "ggml/src/ggml-threading.cpp"
+                "ggml/src/ggml-threading.cpp",
+                "src/whisper.cpp"
             ],
             publicHeadersPath: "include",
             cSettings: [
-                .headerSearchPath("."),
-                .headerSearchPath("src"),
-                .headerSearchPath("include"),
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
-                .define("GGML_USE_ACCELERATE", .when(platforms: [.macOS, .iOS])),
-                .define("WHISPER_USE_COREML", .when(platforms: [.macOS, .iOS])),
+                .headerSearchPath("include"),
+                .headerSearchPath("src"),
+                .define("GGML_USE_ACCELERATE"),
+                .define("WHISPER_USE_COREML"),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
             ],
             cxxSettings: [
-                .headerSearchPath("."),
-                .headerSearchPath("src"),
-                .headerSearchPath("include"),
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
-                .define("GGML_USE_ACCELERATE", .when(platforms: [.macOS, .iOS])),
-                .define("WHISPER_USE_COREML", .when(platforms: [.macOS, .iOS])),
+                .headerSearchPath("include"),
+                .headerSearchPath("src"),
+                .define("GGML_USE_ACCELERATE"),
+                .define("WHISPER_USE_COREML"),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
             ],
             linkerSettings: [
                 .linkedFramework("Accelerate"),
-                .linkedFramework("CoreML", .when(platforms: [.macOS, .iOS])),
-                .linkedFramework("Metal", .when(platforms: [.macOS, .iOS]))
+                .linkedFramework("CoreML"),
+                .linkedFramework("Metal")
             ]
         ),
         .target(
