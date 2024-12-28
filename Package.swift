@@ -27,7 +27,7 @@ let package = Package(
                 "ggml/src/ggml-quants.c",
                 "ggml/src/ggml-threading.cpp"
             ],
-            publicHeadersPath: "../Sources/whisper_cpp/include",
+            publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
