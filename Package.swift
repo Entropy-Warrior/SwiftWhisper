@@ -28,6 +28,7 @@ let package = Package(
                 "ggml/src/ggml-quants.c",
                 "ggml/src/ggml-threading.cpp",
                 "ggml/src/ggml-opt.cpp",
+                "ggml/src/ggml-metal/ggml-metal.m",
                 "ggml/src/ggml-cpu/ggml-cpu.c",
                 "ggml/src/ggml-cpu/ggml-cpu-quants.c",
                 "ggml/src/ggml-cpu/ggml-cpu.cpp",
@@ -40,11 +41,13 @@ let package = Package(
                 .headerSearchPath("ggml/src"),
                 .headerSearchPath("ggml/src/ggml-cpu"),
                 .headerSearchPath("ggml/src/ggml-cpu/amx"),
+                .headerSearchPath("ggml/src/ggml-metal"),
                 .headerSearchPath("include"),
                 .headerSearchPath("src"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
                 .define("GGML_USE_METAL"),
+                .define("GGML_METAL_NDEBUG"),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
             ],
             cxxSettings: [
@@ -52,11 +55,13 @@ let package = Package(
                 .headerSearchPath("ggml/src"),
                 .headerSearchPath("ggml/src/ggml-cpu"),
                 .headerSearchPath("ggml/src/ggml-cpu/amx"),
+                .headerSearchPath("ggml/src/ggml-metal"),
                 .headerSearchPath("include"),
                 .headerSearchPath("src"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
                 .define("GGML_USE_METAL"),
+                .define("GGML_METAL_NDEBUG"),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
             ],
             linkerSettings: [
