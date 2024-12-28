@@ -18,8 +18,22 @@ let package = Package(
         .target(
             name: "whisper_metal",
             path: "Sources/whisper_cpp/ggml/src/ggml-metal",
+            exclude: ["CMakeLists.txt"],
+            sources: ["ggml-metal.m"],
             resources: [
                 .process("ggml-metal.metal")
+            ],
+            cSettings: [
+                .headerSearchPath("../.."),
+                .headerSearchPath("../../include"),
+                .define("GGML_USE_METAL"),
+                .define("GGML_METAL_NDEBUG"),
+                .unsafeFlags(["-fno-objc-arc"])
+            ],
+            linkerSettings: [
+                .linkedFramework("Metal"),
+                .linkedFramework("MetalKit"),
+                .linkedFramework("MetalPerformanceShaders")
             ]
         ),
         .target(
@@ -43,6 +57,7 @@ let package = Package(
                 "ggml/src/ggml-cpu/CMakeLists.txt",
                 "ggml/src/ggml-cpu/cmake",
                 "ggml/src/ggml-metal/ggml-metal.metal",
+                "ggml/src/ggml-metal/ggml-metal.m",
                 "ggml/src/ggml-backend.cpp",
                 "ggml/src/ggml-backend-reg.cpp",
                 "ggml/src/ggml-cpu/ggml-cpu.cpp",
@@ -57,7 +72,6 @@ let package = Package(
                 "ggml/src/ggml-quants.c",
                 "ggml/src/ggml-threading.cpp",
                 "ggml/src/ggml-opt.cpp",
-                "ggml/src/ggml-metal/ggml-metal.m",
                 "ggml/src/ggml-cpu/ggml-cpu.c",
                 "ggml/src/ggml-cpu/ggml-cpu-quants.c"
             ],
