@@ -27,7 +27,12 @@ let package = Package(
                 "ggml/src/ggml-backend-reg.cpp",
                 "ggml/src/ggml-quants.c",
                 "ggml/src/ggml-threading.cpp",
-                "ggml/src/ggml-opt.cpp"
+                "ggml/src/ggml-opt.cpp",
+                "ggml/src/ggml-cpu/ggml-cpu.c",
+                "ggml/src/ggml-cpu/ggml-cpu-quants.c",
+                "ggml/src/ggml-cpu/ggml-cpu.cpp",
+                "ggml/src/ggml-cpu/ggml-cpu-traits.cpp",
+                "ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp"
             ],
             publicHeadersPath: "spm-headers",
             cSettings: [
