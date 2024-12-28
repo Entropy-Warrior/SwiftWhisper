@@ -17,25 +17,18 @@ let package = Package(
     targets: [
         .target(
             name: "whisper_cpp",
-            path: "whisper.cpp",
+            path: "Sources/whisper_cpp",
             exclude: [
-                "bindings",
-                "examples",
-                "models",
-                "samples",
-                "tests",
-                "**/CMakeLists.txt",
-                "**/cmake",
-                "ggml/src/ggml-cuda*",
-                "ggml/src/ggml-vulkan*",
-                "ggml/src/ggml-opencl*",
-                "ggml/src/ggml-kompute*",
-                "ggml/src/ggml-sycl*",
-                "ggml/src/ggml-blas*"
+                "ggml/src/ggml-cuda",
+                "ggml/src/ggml-vulkan",
+                "ggml/src/ggml-opencl",
+                "ggml/src/ggml-kompute",
+                "ggml/src/ggml-sycl",
+                "ggml/src/ggml-blas"
             ],
             sources: [
-                "src/whisper.cpp",
-                "ggml/src/ggml.c",
+                "ggml.c",
+                "whisper.cpp",
                 "ggml/src/ggml-alloc.c",
                 "ggml/src/ggml-backend.cpp",
                 "ggml/src/ggml-backend-reg.cpp",
@@ -57,7 +50,7 @@ let package = Package(
             resources: [
                 .copy("ggml/src/ggml-metal/ggml-metal.metal")
             ],
-            publicHeadersPath: "spm-headers",
+            publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
@@ -66,7 +59,6 @@ let package = Package(
                 .headerSearchPath("ggml/src/ggml-cpu/llamafile"),
                 .headerSearchPath("ggml/src/ggml-metal"),
                 .headerSearchPath("include"),
-                .headerSearchPath("src"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
                 .define("GGML_USE_METAL"),
@@ -93,7 +85,6 @@ let package = Package(
                 .headerSearchPath("ggml/src/ggml-cpu/llamafile"),
                 .headerSearchPath("ggml/src/ggml-metal"),
                 .headerSearchPath("include"),
-                .headerSearchPath("src"),
                 .define("GGML_USE_ACCELERATE"),
                 .define("WHISPER_USE_COREML"),
                 .define("GGML_USE_METAL"),
