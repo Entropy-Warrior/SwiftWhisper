@@ -33,26 +33,22 @@ let package = Package(
                 "ggml/src/CMakeLists.txt",
                 "ggml/src/ggml-metal/CMakeLists.txt",
                 "ggml/src/ggml-cpu/CMakeLists.txt",
-                "ggml/src/ggml-cpu/cmake"
+                "ggml/src/ggml-cpu/cmake",
+                "ggml/src/ggml-metal/ggml-metal.metal"
             ],
             sources: [
                 "ggml.c",
                 "whisper.cpp",
                 "ggml/src/ggml-alloc.c",
-                "ggml/src/ggml-backend.cpp",
-                "ggml/src/ggml-backend-reg.cpp",
                 "ggml/src/ggml-quants.c",
                 "ggml/src/ggml-threading.cpp",
                 "ggml/src/ggml-opt.cpp",
                 "ggml/src/ggml-metal/ggml-metal.m",
                 "ggml/src/ggml-cpu/ggml-cpu.c",
-                "ggml/src/ggml-cpu/ggml-cpu.cpp",
-                "ggml/src/ggml-cpu/ggml-cpu-quants.c",
-                "ggml/src/ggml-cpu/ggml-cpu-traits.cpp",
-                "ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp"
+                "ggml/src/ggml-cpu/ggml-cpu-quants.c"
             ],
             resources: [
-                .process("ggml/src/ggml-metal/ggml-metal.metal")
+                .copy("ggml/src/ggml-metal/ggml-metal.metal")
             ],
             publicHeadersPath: "include",
             cSettings: [
@@ -70,15 +66,48 @@ let package = Package(
                 .define("GGML_USE_METAL_MPS"),
                 .define("GGML_USE_AMX"),
                 .define("GGML_USE_SYSCTL"),
-                .unsafeFlags([
-                    "-Wno-shorten-64-to-32",
-                    "-Wno-unused-variable",
-                    "-Wno-unused-function",
-                    "-O3",
-                    "-fno-objc-arc",
-                    "-march=native"
-                ])
+                .unsafeFlags(["-O3", "-fno-objc-arc"])
             ],
+            linkerSettings: [
+                .linkedFramework("Accelerate"),
+                .linkedFramework("CoreML"),
+                .linkedFramework("Metal"),
+                .linkedFramework("MetalKit"),
+                .linkedFramework("MetalPerformanceShaders")
+            ]
+        ),
+        .target(
+            name: "whisper_cpp_backend",
+            path: "Sources/whisper_cpp",
+            exclude: [
+                "ggml/src/ggml-cuda",
+                "ggml/src/ggml-vulkan",
+                "ggml/src/ggml-opencl",
+                "ggml/src/ggml-kompute",
+                "ggml/src/ggml-sycl",
+                "ggml/src/ggml-blas",
+                "ggml/src/ggml-cann",
+                "ggml/src/ggml-hip",
+                "ggml/src/ggml-musa",
+                "ggml/src/ggml-rpc",
+                "ggml.c",
+                "whisper.cpp",
+                "ggml/src/ggml-alloc.c",
+                "ggml/src/ggml-quants.c",
+                "ggml/src/ggml-threading.cpp",
+                "ggml/src/ggml-opt.cpp",
+                "ggml/src/ggml-metal/ggml-metal.m",
+                "ggml/src/ggml-cpu/ggml-cpu.c",
+                "ggml/src/ggml-cpu/ggml-cpu-quants.c"
+            ],
+            sources: [
+                "ggml/src/ggml-backend.cpp",
+                "ggml/src/ggml-backend-reg.cpp",
+                "ggml/src/ggml-cpu/ggml-cpu.cpp",
+                "ggml/src/ggml-cpu/ggml-cpu-traits.cpp",
+                "ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp"
+            ],
+            publicHeadersPath: "include",
             cxxSettings: [
                 .headerSearchPath("."),
                 .headerSearchPath("ggml/include"),
@@ -95,12 +124,9 @@ let package = Package(
                 .define("GGML_USE_AMX"),
                 .define("GGML_USE_SYSCTL"),
                 .unsafeFlags([
-                    "-Wno-shorten-64-to-32",
-                    "-Wno-unused-variable",
-                    "-Wno-unused-function",
                     "-O3",
-                    "-march=native",
-                    "-std=c++17"
+                    "-std=c++17",
+                    "-stdlib=libc++"
                 ])
             ],
             linkerSettings: [
@@ -108,13 +134,12 @@ let package = Package(
                 .linkedFramework("CoreML"),
                 .linkedFramework("Metal"),
                 .linkedFramework("MetalKit"),
-                .linkedFramework("MetalPerformanceShaders"),
-                .unsafeFlags(["-fno-objc-arc", "-stdlib=libc++"])
+                .linkedFramework("MetalPerformanceShaders")
             ]
         ),
         .target(
             name: "SwiftWhisper",
-            dependencies: ["whisper_cpp"],
+            dependencies: ["whisper_cpp", "whisper_cpp_backend"],
             path: "Sources/SwiftWhisper"
         ),
         .testTarget(
