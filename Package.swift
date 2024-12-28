@@ -29,11 +29,15 @@ let package = Package(
                 "ggml/src/ggml-threading.cpp",
                 "ggml/src/ggml-opt.cpp",
                 "ggml/src/ggml-metal/ggml-metal.m",
+                "ggml/src/ggml-metal/ggml-metal.metal",
                 "ggml/src/ggml-cpu/ggml-cpu.c",
                 "ggml/src/ggml-cpu/ggml-cpu-quants.c",
                 "ggml/src/ggml-cpu/ggml-cpu.cpp",
                 "ggml/src/ggml-cpu/ggml-cpu-traits.cpp",
                 "ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp"
+            ],
+            resources: [
+                .copy("ggml/src/ggml-metal/ggml-metal.metal")
             ],
             publicHeadersPath: "spm-headers",
             cSettings: [
@@ -48,7 +52,8 @@ let package = Package(
                 .define("WHISPER_USE_COREML"),
                 .define("GGML_USE_METAL"),
                 .define("GGML_METAL_NDEBUG"),
-                .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
+                .define("GGML_USE_METAL_UNIFIED_MEMORY"),
+                .unsafeFlags(["-Wno-shorten-64-to-32", "-O3", "-fno-objc-arc"])
             ],
             cxxSettings: [
                 .headerSearchPath("ggml/include"),
@@ -62,12 +67,15 @@ let package = Package(
                 .define("WHISPER_USE_COREML"),
                 .define("GGML_USE_METAL"),
                 .define("GGML_METAL_NDEBUG"),
+                .define("GGML_USE_METAL_UNIFIED_MEMORY"),
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
             ],
             linkerSettings: [
                 .linkedFramework("Accelerate"),
                 .linkedFramework("CoreML"),
-                .linkedFramework("Metal")
+                .linkedFramework("Metal"),
+                .linkedFramework("MetalKit"),
+                .linkedFramework("MetalPerformanceShaders")
             ]
         ),
         .target(
