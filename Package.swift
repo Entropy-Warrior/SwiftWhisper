@@ -1,29 +1,56 @@
 // swift-tools-version:5.5
+
 import PackageDescription
-
-var exclude: [String] = []
-
-#if os(Linux)
-// Linux doesn't support CoreML, and will attempt to import the coreml source directory
-exclude.append("coreml")
-#endif
 
 let package = Package(
     name: "SwiftWhisper",
+    platforms: [
+        .macOS(.v12),
+        .iOS(.v14)
+    ],
     products: [
-        .library(name: "SwiftWhisper", targets: ["SwiftWhisper"])
+        .library(
+            name: "SwiftWhisper",
+            targets: ["SwiftWhisper"]
+        ),
     ],
     targets: [
-        .target(name: "SwiftWhisper", dependencies: [.target(name: "whisper_cpp")]),
-        .target(name: "whisper_cpp",
-                exclude: exclude,
-                cSettings: [
-                    .define("GGML_USE_ACCELERATE", .when(platforms: [.macOS, .macCatalyst, .iOS])),
-                    .define("WHISPER_USE_COREML", .when(platforms: [.macOS, .macCatalyst, .iOS])),
-                    .define("WHISPER_COREML_ALLOW_FALLBACK", .when(platforms: [.macOS, .macCatalyst, .iOS]))
-                ]),
-        .testTarget(name: "WhisperTests", dependencies: [.target(name: "SwiftWhisper")], resources: [.copy("TestResources/")])
+        .target(
+            name: "whisper_cpp",
+            path: "whisper.cpp",
+            sources: [
+                "src/whisper.cpp",
+                "ggml/src/ggml.c",
+                "ggml/src/ggml-alloc.c",
+                "ggml/src/ggml-backend.cpp",
+                "ggml/src/ggml-quants.c",
+                "ggml/src/ggml-threading.cpp"
+            ],
+            publicHeadersPath: "include",
+            cSettings: [
+                .headerSearchPath("src"),
+                .headerSearchPath("ggml/include"),
+                .headerSearchPath("ggml/src"),
+                .headerSearchPath("include"),
+                .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
+            ],
+            cxxSettings: [
+                .headerSearchPath("src"),
+                .headerSearchPath("ggml/include"),
+                .headerSearchPath("ggml/src"),
+                .headerSearchPath("include"),
+                .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
+            ]
+        ),
+        .target(
+            name: "SwiftWhisper",
+            dependencies: ["whisper_cpp"]
+        ),
+        .testTarget(
+            name: "WhisperTests",
+            dependencies: ["SwiftWhisper"]
+        ),
     ],
-    cxxLanguageStandard: CXXLanguageStandard.cxx11
+    cxxLanguageStandard: .cxx11
 )
 
