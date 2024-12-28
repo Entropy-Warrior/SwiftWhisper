@@ -18,7 +18,21 @@ let package = Package(
         .target(
             name: "whisper_cpp",
             path: "whisper.cpp",
-            exclude: ["bindings", "examples", "models", "samples", "tests"],
+            exclude: [
+                "bindings",
+                "examples",
+                "models",
+                "samples",
+                "tests",
+                "**/CMakeLists.txt",
+                "**/cmake",
+                "ggml/src/ggml-cuda*",
+                "ggml/src/ggml-vulkan*",
+                "ggml/src/ggml-opencl*",
+                "ggml/src/ggml-kompute*",
+                "ggml/src/ggml-sycl*",
+                "ggml/src/ggml-blas*"
+            ],
             sources: [
                 "src/whisper.cpp",
                 "ggml/src/ggml.c",
@@ -31,10 +45,14 @@ let package = Package(
                 "ggml/src/ggml-metal/ggml-metal.m",
                 "ggml/src/ggml-metal/ggml-metal.metal",
                 "ggml/src/ggml-cpu/ggml-cpu.c",
-                "ggml/src/ggml-cpu/ggml-cpu-quants.c",
                 "ggml/src/ggml-cpu/ggml-cpu.cpp",
+                "ggml/src/ggml-cpu/ggml-cpu-quants.c",
                 "ggml/src/ggml-cpu/ggml-cpu-traits.cpp",
-                "ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp"
+                "ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp",
+                "ggml/src/ggml-cpu/ggml-cpu-hbm.cpp",
+                "ggml/src/ggml-cpu/amx/amx.cpp",
+                "ggml/src/ggml-cpu/amx/mmq.cpp",
+                "ggml/src/ggml-cpu/llamafile/sgemm.cpp"
             ],
             resources: [
                 .copy("ggml/src/ggml-metal/ggml-metal.metal")
@@ -45,6 +63,7 @@ let package = Package(
                 .headerSearchPath("ggml/src"),
                 .headerSearchPath("ggml/src/ggml-cpu"),
                 .headerSearchPath("ggml/src/ggml-cpu/amx"),
+                .headerSearchPath("ggml/src/ggml-cpu/llamafile"),
                 .headerSearchPath("ggml/src/ggml-metal"),
                 .headerSearchPath("include"),
                 .headerSearchPath("src"),
@@ -53,13 +72,25 @@ let package = Package(
                 .define("GGML_USE_METAL"),
                 .define("GGML_METAL_NDEBUG"),
                 .define("GGML_USE_METAL_UNIFIED_MEMORY"),
-                .unsafeFlags(["-Wno-shorten-64-to-32", "-O3", "-fno-objc-arc"])
+                .define("GGML_USE_K_QUANTS"),
+                .define("GGML_USE_METAL_MPS"),
+                .define("GGML_USE_AMX"),
+                .define("GGML_USE_SYSCTL"),
+                .unsafeFlags([
+                    "-Wno-shorten-64-to-32",
+                    "-Wno-unused-variable",
+                    "-Wno-unused-function",
+                    "-O3",
+                    "-fno-objc-arc",
+                    "-march=native"
+                ])
             ],
             cxxSettings: [
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
                 .headerSearchPath("ggml/src/ggml-cpu"),
                 .headerSearchPath("ggml/src/ggml-cpu/amx"),
+                .headerSearchPath("ggml/src/ggml-cpu/llamafile"),
                 .headerSearchPath("ggml/src/ggml-metal"),
                 .headerSearchPath("include"),
                 .headerSearchPath("src"),
@@ -68,14 +99,25 @@ let package = Package(
                 .define("GGML_USE_METAL"),
                 .define("GGML_METAL_NDEBUG"),
                 .define("GGML_USE_METAL_UNIFIED_MEMORY"),
-                .unsafeFlags(["-Wno-shorten-64-to-32", "-O3"])
+                .define("GGML_USE_K_QUANTS"),
+                .define("GGML_USE_METAL_MPS"),
+                .define("GGML_USE_AMX"),
+                .define("GGML_USE_SYSCTL"),
+                .unsafeFlags([
+                    "-Wno-shorten-64-to-32",
+                    "-Wno-unused-variable",
+                    "-Wno-unused-function",
+                    "-O3",
+                    "-march=native"
+                ])
             ],
             linkerSettings: [
                 .linkedFramework("Accelerate"),
                 .linkedFramework("CoreML"),
                 .linkedFramework("Metal"),
                 .linkedFramework("MetalKit"),
-                .linkedFramework("MetalPerformanceShaders")
+                .linkedFramework("MetalPerformanceShaders"),
+                .unsafeFlags(["-fno-objc-arc"])
             ]
         ),
         .target(
