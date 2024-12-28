@@ -29,7 +29,7 @@ let package = Package(
                 "ggml/src/ggml-threading.cpp",
                 "ggml/src/ggml-opt.cpp"
             ],
-            publicHeadersPath: "include",
+            publicHeadersPath: "spm-headers",
             cSettings: [
                 .headerSearchPath("ggml/include"),
                 .headerSearchPath("ggml/src"),
