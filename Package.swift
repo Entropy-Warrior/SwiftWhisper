@@ -33,8 +33,7 @@ let package = Package(
                 "ggml/src/CMakeLists.txt",
                 "ggml/src/ggml-metal/CMakeLists.txt",
                 "ggml/src/ggml-cpu/CMakeLists.txt",
-                "ggml/src/ggml-cpu/cmake",
-                "ggml/src/ggml-metal/ggml-metal.metal"
+                "ggml/src/ggml-cpu/cmake"
             ],
             sources: [
                 "ggml.c",
@@ -53,7 +52,7 @@ let package = Package(
                 "ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp"
             ],
             resources: [
-                .copy("ggml/src/ggml-metal/ggml-metal.metal")
+                .process("ggml/src/ggml-metal/ggml-metal.metal")
             ],
             publicHeadersPath: "include",
             cSettings: [
